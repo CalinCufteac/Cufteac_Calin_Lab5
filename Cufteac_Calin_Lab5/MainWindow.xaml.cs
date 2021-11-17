@@ -32,7 +32,7 @@ namespace Cufteac_Calin_Lab5
     {
         ActionState action = ActionState.Nothing;
         AutoLotEntitiesModel ctx = new AutoLotEntitiesModel();
-        CollectionViewSource customerOrdersVSource;
+        CollectionViewSource customerOrdersVSource, customerVSource;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,12 +42,9 @@ namespace Cufteac_Calin_Lab5
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            System.Windows.Data.CollectionViewSource customerViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("customerViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // customerViewSource.Source = [generic data source]
-            //using System.Data.Entity;
-            customerVSource =
-           ((System.Windows.Data.CollectionViewSource)(this.FindResource("customerViewSource")));
+           
+         
+            customerVSource=((System.Windows.Data.CollectionViewSource)(this.FindResource("customerViewSource")));
             customerVSource.Source = ctx.Customers.Local;
             ctx.Customers.Load();
             customerOrdersVSource =
@@ -158,6 +155,7 @@ namespace Cufteac_Calin_Lab5
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
             private void gbOperations_Click(object sender, RoutedEventArgs e)
         {
             Button SelectedButton = (Button)e.OriginalSource;
@@ -208,10 +206,14 @@ namespace Cufteac_Calin_Lab5
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             action = ActionState.New;
+            SetValidationBinding();
+
         }
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             action = ActionState.Edit;
+            SetValidationBinding();
+
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -290,6 +292,32 @@ namespace Cufteac_Calin_Lab5
         {
             customerVSource.View.MoveCurrentToPrevious();
         }
+        private void SetValidationBinding()
+        {
+            Binding firstNameValidationBinding = new Binding();
+            firstNameValidationBinding.Source = customerVSource;
+            firstNameValidationBinding.Path = new PropertyPath("FirstName");
+            firstNameValidationBinding.NotifyOnValidationError = true;
+            firstNameValidationBinding.Mode = BindingMode.TwoWay;
+            firstNameValidationBinding.UpdateSourceTrigger =
+           UpdateSourceTrigger.PropertyChanged;
+            //string required
+            firstNameValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            firstNameTextBox.SetBinding(TextBox.TextProperty,
+           firstNameValidationBinding);
+            Binding lastNameValidationBinding = new Binding();
+            lastNameValidationBinding.Source = customerVSource;
+            lastNameValidationBinding.Path = new PropertyPath("LastName");
+            lastNameValidationBinding.NotifyOnValidationError = true;
+            lastNameValidationBinding.Mode = BindingMode.TwoWay;
+            lastNameValidationBinding.UpdateSourceTrigger =
+           UpdateSourceTrigger.PropertyChanged;
+            //string min length validator
+            lastNameValidationBinding.ValidationRules.Add(new
+           StringMinLengthValidator());
+            lastNameTextBox.SetBinding(TextBox.TextProperty,
+           lastNameValidationBinding); //setare binding nou
+        }
         private void SaveInventory()
         {
             Inventory inventory = null;
@@ -352,8 +380,5 @@ namespace Cufteac_Calin_Lab5
 
     }
 
-        private void ordersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+       
     }
