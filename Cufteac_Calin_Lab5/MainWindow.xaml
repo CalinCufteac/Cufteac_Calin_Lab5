@@ -15,6 +15,13 @@
             <Setter Property = "Background" Value = "DarkGreen"/>
             <Setter Property = "Foreground" Value = "Yellow"/>
         </Style>
+        <Style x:Key ="BigPurpleButton" TargetType="Button">
+            <Setter Property = "FontSize" Value ="10"/>
+            <Setter Property = "Height" Value = "20"/>
+            <Setter Property = "Width" Value = "100"/>
+            <Setter Property = "Background" Value = "Purple"/>
+            <Setter Property = "Foreground" Value = "Cyan"/>
+        </Style>
         <CollectionViewSource x:Key="customerViewSource" d:DesignSource="{d:DesignInstance {x:Type AutoLotModel:Customer}, CreateList=True}"/>
         <CollectionViewSource x:Key="inventoryViewSource" d:DesignSource="{d:DesignInstance {x:Type AutoLotModel:Inventory}, CreateList=True}"/>
         <CollectionViewSource x:Key="customerOrdersViewSource" Source="{Binding Orders, Source={StaticResource customerViewSource}}"/>
@@ -153,27 +160,30 @@ ElementName=ordersDataGrid,Path=SelectedItem.CarId,Mode=OneWay}">
                             Header="Color" Width="SizeToHeader"/>
                     </DataGrid.Columns>
                 </DataGrid>
-            </Grid>
+                    <TextBlock HorizontalAlignment="Left" Margin="102,36,0,0" TextWrapping="Wrap" Text="Customers" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="461,39,0,0" TextWrapping="Wrap" Text="Invetory" VerticalAlignment="Top"/>
+                </Grid>
         </TabItem>
     </TabControl>
         <GroupBox x:Name="gbOperations" Header="GroupBox" HorizontalAlignment="Left" Height="100"  VerticalAlignment="Top" Width="114" Button.Click="gbOperations_Click" Margin="0,86,0,0">
             <StackPanel x:Name="spOperations" >
-                <Button x:Name="btnNew" Content="New" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="76" Click="btnNew_Click" Style="{StaticResource BigGreenButton}" />
-                <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnEdit_Click" Style="{StaticResource BigGreenButton}"/>
-                <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnDelete_Click" Style="{StaticResource BigGreenButton}"/>
+                <Button x:Name="btnNew" Content="New" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="76" Click="btnNew_Click"  Style="{StaticResource BigGreenButton}" />
+                <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnEdit_Click"  Style="{StaticResource BigGreenButton}"/>
+                    <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnDelete_Click" Style="{StaticResource BigGreenButton}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox x:Name="gbActions" Header="GroupBox" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="114" Margin="0,258,0,0">
             <StackPanel x:Name="spActions">
-                <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnSave_Click" >
+                <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnSave_Click">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BigPurpleButton}">
                             <Setter Property="IsEnabled" Value="false" />
                             <Style.Triggers>
                                 <!--Butonul Save va fi inactiv daca exista erori de validare -->
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding ElementName=lastNameTextBox, Path=(Validation.HasError)}" Value="false" />
+                                        <Condition Binding="{Binding ElementName=firstNameTextBox, Path=(Validation.HasError)}" Value="false" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="true" />
                                 </MultiDataTrigger>
@@ -181,7 +191,7 @@ ElementName=ordersDataGrid,Path=SelectedItem.CarId,Mode=OneWay}">
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnCancel_Click" Style="{StaticResource BigPurpleButton}" />
             </StackPanel>
         </GroupBox>
     </Grid>
